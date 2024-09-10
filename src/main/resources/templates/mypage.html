@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>마이페이지</title>
+</head>
+<body>
+<h1 th:text="${pageName}">마이페이지</h1>
+
+<div>
+    <h2>내 정보</h2>
+    <p><strong>이름:</strong> <span th:text="${member.name}"></span></p>
+    <p><strong>이메일:</strong> <span th:text="${member.email}"></span></p>
+<!--    <p><strong>역할:</strong> <span th:text="${member.role}"></span></p>-->
+    <!-- 필요한 다른 정보들도 추가 가능 -->
+</div>
+
+<div>
+    <a th:href="@{/logout}">로그아웃</a>
+</div>
+</body>
+</html>

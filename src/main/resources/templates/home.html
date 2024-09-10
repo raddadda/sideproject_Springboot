@@ -1,0 +1,28 @@
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="|${pageName}|"></title>
+</head>
+<body>
+<div>
+    <div th:if="${name == null}">
+        <h3>로그인 되어있지 않습니다!</h3>
+        <button th:onclick="|location.href='@{/login/join}'|">회원 가입</button> <br/><br/>
+        <button th:onclick="|location.href='@{/login/login}'|">로그인</button>
+    </div>
+    <div th:unless="${name == null}">
+        <h3>[[${name}]]님 환영합니다!</h3>
+        <button th:onclick="|location.href='@{/login/mypage}'|">마이 페이지</button> <br/><br/>
+        <button th:onclick="|location.href='@{/login/admin}'|">관리자 페이지</button> <br/><br/>
+        <button th:onclick="|location.href='@{/cart}'|">장바구니</button> <br/><br/>
+        <button th:onclick="|location.href='@{/orders}'|">주문 내역</button> <br/><br/>
+        <button th:onclick="|location.href='@{/login/logout}'|">로그아웃</button>
+    </div>
+    <div>
+        <h2>product list</h2>
+        <button th:onclick="|location.href='@{/products}'|">상품리스트</button>
+    </div>
+</div>
+</body>
+</html>

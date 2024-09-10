@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Product List</title>
+</head>
+<body>
+<h1>Products</h1>
+<a th:href="@{/products/new}">Add New Product</a>
+<a th:href="@{/login}">Home</a>
+
+<!-- 정렬 폼 -->
+<form action="/products/sort" method="post" style="margin-bottom: 20px;">
+  <label for="sortOrder">Sort By Name:</label>
+  <select id="sortOrder" name="sortOrder" onchange="this.form.submit()">
+    <option value="nameAsc" th:selected="${sortOrder == 'nameAsc'}">이름 오름차순</option>
+    <option value="nameDesc" th:selected="${sortOrder == 'nameDesc'}">이름 내림차순</option>
+    <option value="priceAsc" th:selected="${sortOrder == 'priceAsc'}">가격 오름차순</option>
+    <option value="priceDesc" th:selected="${sortOrder == 'priceDesc'}">가격 내림차순</option>
+  </select>
+</form>
+
+<table>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+    <th>Stock</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="product : ${products}">
+    <td th:text="${product.name}">Product Name</td>
+    <td th:text="${product.description}">Product Description</td>
+    <td th:text="${product.price}">100</td>
+    <td th:text="${product.stock}">1</td>
+    <td th:text="${product.createdDate}">1</td>
+    <td>
+      <a th:href="@{/products/{id}(id=${product.id})}">View</a>
+      <a th:href="@{/products/{id}/edit(id=${product.id})}">Edit</a>
+      <form th:action="@{/products/{id}/delete(id=${product.id})}" method="post" style="display:inline;">
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

@@ -57,7 +57,7 @@ public class OrderController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         model.addAttribute("orders", orders);
         model.addAttribute("dateFormatter", formatter);
-        return "orderList";
+        return "/orders/orderList";
     }
 
 

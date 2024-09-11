@@ -37,7 +37,7 @@ public class MemberController {
             return "redirect:/login";
         }
 
-        return "mypage";
+        return "/members/mypage";
     }
 
 

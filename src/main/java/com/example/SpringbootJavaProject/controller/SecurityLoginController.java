@@ -55,7 +55,7 @@ public class SecurityLoginController {
     public String joinForm(Model model){
         model.addAttribute("pageName", "일반 로그인");
         model.addAttribute("loginRequest", new LoginRequest());
-        return "login";
+        return "/members/login";
     }
 
     @GetMapping("/join")
@@ -64,7 +64,7 @@ public class SecurityLoginController {
 
         // 회원가입을 위해서 model 통해서 joinRequest 전달
         model.addAttribute("joinRequest", new JoinRequest());
-        return "join";
+        return "/members/join";
     }
 
     @PostMapping("/join")

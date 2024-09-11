@@ -52,7 +52,7 @@ public String listProducts(HttpSession session, Model model) {
     // 현재 정렬 상태를 템플릿으로 전달합니다.
     model.addAttribute("sortOrder", sortOrder);
 
-    return "productList"; // products 폴더의 productList 템플릿 사용
+    return "/products/productList"; // products 폴더의 productList 템플릿 사용
 }
 
     @PostMapping("/sort")
@@ -68,14 +68,14 @@ public String listProducts(HttpSession session, Model model) {
     public String viewProduct(@PathVariable("id") Long id, Model model) {
         Optional<Product> product = productService.findById(id);
         product.ifPresent(value -> model.addAttribute("product", value));
-        return "productDetail";
+        return "/products/productDetail";
     }
 
     @GetMapping("/new")
     public String newProductForm(Model model) {
         model.addAttribute("product", new ProductRequest());
 
-        return "productForm";
+        return "/products/productForm";
     }
 
     @PostMapping
@@ -89,7 +89,7 @@ public String listProducts(HttpSession session, Model model) {
     public String editProductForm(@PathVariable("id") Long id, Model model) {
         Optional<Product> product = productService.findById(id);
         product.ifPresent(value -> model.addAttribute("product", value));
-        return "productForm";
+        return "/products/productForm";
     }
 
     @PostMapping("/{id}/delete")
@@ -102,7 +102,7 @@ public String listProducts(HttpSession session, Model model) {
     @GetMapping("/products")
     public String listProducts(Model model) {
         model.addAttribute("products", productService.findAll());
-        return "productList";
+        return "/products/productList";
     }
 
     // 상품을 장바구니에 추가하는 메서드

@@ -10,7 +10,7 @@
   <tr>
     <th>Order ID</th>
     <th>Date</th>
-<!--    <th>Status</th>-->
+    <!--    <th>Status</th>-->
     <th>Total Price</th>
   </tr>
   </thead>
@@ -21,7 +21,7 @@
     <td>
       <ul>
         <!-- 주문한 상품의 이름을 출력 -->
-        <li th:each="item : ${order.orderItems}" th:text="${item.product.name}"></li>
+        <li th:each="item : ${order.orderItems}" th:text="${item.ordername}"></li>
       </ul>
     </td>
     <td th:text="${order.totalPrice}"></td>

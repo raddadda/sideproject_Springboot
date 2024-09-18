@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order List</title>
+</head>
+<body>
+<h1>Your Orders</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>Date</th>
+        <th>Total Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.orderDate.format(dateFormatter)}"></td>
+        <td>
+            <ul>
+                <li th:each="item : ${order.orderItems}" th:text="${item.ordername}"></li>
+            </ul>
+        </td>
+        <td th:text="${order.totalPrice}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이지 네비게이션 -->
+<div>
+    <a th:if="${hasPrevious}" th:href="@{/orders/v4/orders(page=${currentPage - 1}, size=${size})}">Previous</a>
+    <a th:if="${hasNext}" th:href="@{/orders/v4/orders(page=${currentPage + 1}, size=${size})}">Next</a>
+</div>
+
+<a th:href="@{/products}">Back to Products</a>
+</body>
+</html>

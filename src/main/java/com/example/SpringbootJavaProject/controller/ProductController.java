@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -55,6 +56,34 @@ public String listProducts(HttpSession session, Model model) {
     return "/products/productList"; // products 폴더의 productList 템플릿 사용
 }
 
+    @GetMapping("/v1/products")
+    public String v1_listProducts(HttpSession session, Model model) {
+        // 세션에서 정렬 기준을 가져옵니다.
+        String sortOrder = (String) session.getAttribute("sortOrder");
+        if (sortOrder == null) {
+            sortOrder = "nameAsc"; // 기본 정렬 방식은 오름차순
+        }
+
+        // 정렬 기준에 따라 데이터를 불러옵니다.
+        if ("nameDesc".equals(sortOrder)) {
+
+            model.addAttribute("products", productService.findAllSortedByNameDesc());
+
+
+
+        } else if("priceAsc".equals(sortOrder)) {
+            model.addAttribute("products", productService.findAllSortedByPriceAsc());
+        } else if("priceDesc".equals(sortOrder)) {
+            model.addAttribute("products", productService.findAllSortedByPriceDesc());
+        }  else {
+            model.addAttribute("products", productService.findAllSortedByNameAsc());
+        }
+
+        // 현재 정렬 상태를 템플릿으로 전달합니다.
+        model.addAttribute("sortOrder", sortOrder);
+
+        return "/products/productList"; // products 폴더의 productList 템플릿 사용
+    }
     @PostMapping("/sort")
     public String setSortOrder(@RequestParam("sortOrder") String sortOrder, HttpSession session) {
         // 세션에 정렬 기준을 저장합니다.

@@ -2,6 +2,8 @@ package com.example.SpringbootJavaProject.service;
 
 import com.example.SpringbootJavaProject.entitiy.*;
 import com.example.SpringbootJavaProject.repository.OrderRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,9 +38,23 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    // 해당 회원의 주문 목록을 가져옴
     public List<Order> findOrdersByMember(Member member) {
         return orderRepository.findByMember(member);
     }
-    // 회원의 주문 목록을 가져옴
+
+    // 모든 회원의 주문 목록을 가져옴
+    public List<Order> findAll() {
+        return orderRepository.findAll();
+    }
+
+
+    // 모든 회원의 주문 목록을 가져옴
+    public List<Order> findAllWithItem() {
+        return orderRepository.findAllWithItem();
+    }
+    public Page<Order> findAllWithItem2(Pageable pageable) {
+        return orderRepository.findAllWithItem2(pageable);
+    }
 
 }

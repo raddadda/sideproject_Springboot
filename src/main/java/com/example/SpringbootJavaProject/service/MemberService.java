@@ -4,6 +4,7 @@ import com.example.SpringbootJavaProject.entitiy.Member;
 import com.example.SpringbootJavaProject.repository.MemberRepository;
 import com.example.SpringbootJavaProject.request.JoinRequest;
 import com.example.SpringbootJavaProject.request.LoginRequest;
+import com.example.SpringbootJavaProject.request.MemberUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,12 @@ public class MemberService {
         Member member = memberRepository.findByLoginId(loginId);
 
         return member;
+    }
+
+    public void updateMemberInfo(MemberUpdateRequest memberUpdateRequest, Member member) {
+        member.setName(memberUpdateRequest.getName());
+        member.setEmail(memberUpdateRequest.getEmail());
+        memberRepository.save(member); // 수정된 회원 정보 저장
     }
 
 

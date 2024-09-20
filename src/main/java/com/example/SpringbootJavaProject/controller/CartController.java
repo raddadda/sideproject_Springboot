@@ -35,7 +35,8 @@ public class CartController {
         Member member = memberService.findByLoginId(principal.getName());
         Cart cart = cartService.getCartByMember(member);
         model.addAttribute("cart", cart);
-        return "/cart/cartView";
+        //return "cart/products/add/cartView";
+        return "cart/cartView";
     }
 
 

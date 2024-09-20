@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
@@ -22,8 +23,15 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             " join fetch oi.product p")
     List<Order> findAllWithItem();
 
-    // v4
+    // v4 - 회원 전체 조회
     @Query("select o from Order o" +
             " join fetch o.member m")
     Page<Order> findAllWithItem2(Pageable pageable);
+
+    // - 특정 회원 조회
+    @Query("select o from Order o" +
+            " join fetch o.member m" +
+            " where m = :member")
+    Page<Order> findAllWithItemByMember(@Param("member") Member member, Pageable pageable);
+
 }

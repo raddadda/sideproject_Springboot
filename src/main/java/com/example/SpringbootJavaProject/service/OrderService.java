@@ -56,5 +56,9 @@ public class OrderService {
     public Page<Order> findAllWithItem2(Pageable pageable) {
         return orderRepository.findAllWithItem2(pageable);
     }
+    public Page<Order> findAllWithItemByMember(Member member, Pageable pageable) {
+        return orderRepository.findAllWithItemByMember(member, pageable);
+    }
+
 
 }

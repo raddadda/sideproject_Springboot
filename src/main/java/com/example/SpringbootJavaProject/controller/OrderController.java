@@ -1,5 +1,6 @@
 package com.example.SpringbootJavaProject.controller;
 
+import com.example.SpringbootJavaProject.Role;
 import com.example.SpringbootJavaProject.entitiy.*;
 import com.example.SpringbootJavaProject.request.OrderRequest;
 import com.example.SpringbootJavaProject.service.CartService;
@@ -49,21 +50,18 @@ public class OrderController {
             productService.updateStock(item.getProduct().getId(), item.getQuantity());
         }
 
-        // 장바구니 비우기 (선택 사항)
-        //cartService.clearCart(member);
+        //장바구니 비우기
+        cartService.clearCart(member);
 
         return "redirect:/orders";
     }
 
     @GetMapping
     public String listOrders(Principal principal, Model model) {
-        System.out.println("------------member-----------");
         Member member = memberService.findByLoginId(principal.getName());
-        System.out.println("------------orders-----------");
         //List<Order> orders = orderService.findOrdersByMember(member);
         List<Order> orders = orderService.findAll();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        System.out.println("------------ model.addAttribute-----------");
         model.addAttribute("orders", orders);
         model.addAttribute("dateFormatter", formatter);
         return "/orders/orderList";
@@ -84,11 +82,8 @@ public class OrderController {
     }
     @GetMapping("/v2/orders")
     public String v2_listOrders(Principal principal, Model model) {
-        System.out.println("------------member-----------");
         Member member = memberService.findByLoginId(principal.getName());
-        System.out.println("------------orders-----------");
         List<Order> orders = orderService.findAll();
-        System.out.println("------------result-----------");
         List<OrderRequest> result = orders.stream()
                 .map(o -> new OrderRequest(o))
                 .collect(toList());
@@ -102,17 +97,13 @@ public class OrderController {
 
     @GetMapping("/v3/orders")
     public String v3_listOrders(Principal principal, Model model) {
-        System.out.println("------------member-----------");
         Member member = memberService.findByLoginId(principal.getName());
-        System.out.println("------------orders-----------");
         List<Order> orders = orderService.findAllWithItem();
-        System.out.println("------------result-----------");
         List<OrderRequest> result = orders.stream()
                 .map(o -> new OrderRequest(o))
                 .collect(toList());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        System.out.println("------------model.addAttribute-----------");
         model.addAttribute("orders", result);
         model.addAttribute("dateFormatter", formatter);
         return "/orders/orderList_v3";
@@ -122,21 +113,25 @@ public class OrderController {
     public String v4_listOrders(@RequestParam(value = "page", defaultValue = "0") int page,
                                 @RequestParam(value = "size", defaultValue = "2") int size,
                                 Principal principal, Model model) {
-        System.out.println("------------member-----------");
         Member member = memberService.findByLoginId(principal.getName());
+        Role role = member.getRole(); // 회원의 역할을 가져옴
 
-        System.out.println("------------orders-----------");
         Pageable pageable = PageRequest.of(page, size); // 페이징 정보 설정
-        Page<Order> orderPage = orderService.findAllWithItem2(pageable); // 페이징된 결과 가져오기
+        Page<Order> orderPage;
 
-        System.out.println("------------result-----------");
+        if ("ROLE_ADMIN".equals(role)) {
+            orderPage = orderService.findAllWithItem2(pageable); // 모든 주문 조회
+        } else {
+            orderPage = orderService.findAllWithItemByMember(member, pageable); // 해당 회원의 주문만 조회
+        }
+
         List<OrderRequest> result = orderPage.getContent().stream()
                 .map(OrderRequest::new)
                 .collect(Collectors.toList());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        System.out.println("------------model.addAttribute-----------");
+
         model.addAttribute("orders", result); // 주문 리스트
         model.addAttribute("dateFormatter", formatter); // 날짜 포맷 설정
         model.addAttribute("currentPage", page); // 현재 페이지 정보

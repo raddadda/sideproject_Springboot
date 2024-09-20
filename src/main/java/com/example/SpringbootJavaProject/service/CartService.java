@@ -7,6 +7,7 @@ import com.example.SpringbootJavaProject.entitiy.Product;
 import com.example.SpringbootJavaProject.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,13 @@ public class CartService {
     public Cart findByMember(Member member) {
         return cartRepository.findByMember(member)
                 .orElseThrow(() -> new IllegalArgumentException("장바구니를 찾을 수 없습니다."));
+    }
+
+    // 장바구니 비우기
+    @Transactional
+    public void clearCart(Member member) {
+        Cart cart = findByMember(member);
+        cartRepository.clearCartItems(cart.getId());
     }
 }
 

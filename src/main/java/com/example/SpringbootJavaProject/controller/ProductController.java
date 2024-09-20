@@ -31,30 +31,37 @@ public class ProductController {
         this.cartService = cartService;
     }
 
-@GetMapping
-public String listProducts(HttpSession session, Model model) {
-    // 세션에서 정렬 기준을 가져옵니다.
-    String sortOrder = (String) session.getAttribute("sortOrder");
-    if (sortOrder == null) {
-        sortOrder = "nameAsc"; // 기본 정렬 방식은 오름차순
+    @GetMapping
+    public String listProducts(HttpSession session, Model model, Principal principal) {
+        // 세션에서 정렬 기준을 가져옵니다.
+        String sortOrder = (String) session.getAttribute("sortOrder");
+        if (sortOrder == null) {
+            sortOrder = "nameAsc"; // 기본 정렬 방식은 오름차순
+        }
+
+        // 정렬 기준에 따라 데이터를 불러옵니다.
+        if ("nameDesc".equals(sortOrder)) {
+            model.addAttribute("products", productService.findAllSortedByNameDesc());
+        } else if("priceAsc".equals(sortOrder)) {
+            model.addAttribute("products", productService.findAllSortedByPriceAsc());
+        } else if("priceDesc".equals(sortOrder)) {
+            model.addAttribute("products", productService.findAllSortedByPriceDesc());
+        }  else {
+            model.addAttribute("products", productService.findAllSortedByNameAsc());
+        }
+
+        // 현재 정렬 상태를 템플릿으로 전달합니다.
+        model.addAttribute("sortOrder", sortOrder);
+
+        // 현재 로그인한 사용자의 역할을 확인합니다.
+        if (principal != null) {
+            Member member = memberService.findByLoginId(principal.getName());
+            model.addAttribute("role", member.getRole()); // 회원의 역할을 모델에 추가
+        }
+
+        return "/products/productList"; // products 폴더의 productList 템플릿 사용
     }
 
-    // 정렬 기준에 따라 데이터를 불러옵니다.
-    if ("nameDesc".equals(sortOrder)) {
-        model.addAttribute("products", productService.findAllSortedByNameDesc());
-    } else if("priceAsc".equals(sortOrder)) {
-        model.addAttribute("products", productService.findAllSortedByPriceAsc());
-    } else if("priceDesc".equals(sortOrder)) {
-        model.addAttribute("products", productService.findAllSortedByPriceDesc());
-    }  else {
-        model.addAttribute("products", productService.findAllSortedByNameAsc());
-    }
-
-    // 현재 정렬 상태를 템플릿으로 전달합니다.
-    model.addAttribute("sortOrder", sortOrder);
-
-    return "/products/productList"; // products 폴더의 productList 템플릿 사용
-}
 
     @GetMapping("/v1/products")
     public String v1_listProducts(HttpSession session, Model model) {

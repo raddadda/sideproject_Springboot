@@ -3,8 +3,12 @@ package com.example.SpringbootJavaProject.service;
 
 import com.example.SpringbootJavaProject.entitiy.Product;
 import com.example.SpringbootJavaProject.repository.ProductRepository;
+import com.example.SpringbootJavaProject.request.ProductRequest;
+import com.example.SpringbootJavaProject.request.ProductUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,10 +46,23 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public Product save(Product product) {
+//    public Product save(Product product) {
+//        return productRepository.save(product);
+//    }
+
+    // DTO를 사용해 상품을 저장하는 메서드
+    public Product save(ProductRequest productRequest) {
+        // DTO에서 Product 엔티티로 변환
+        Product product = new Product();
+        product.setName(productRequest.getName());
+        product.setDescription(productRequest.getDescription());
+        product.setPrice(productRequest.getPrice());
+        product.setStock(productRequest.getStock());
+        product.setCreatedDate(LocalDateTime.now());
+
+        // Product 엔티티를 저장
         return productRepository.save(product);
     }
-
     public void deleteById(Long id) {
         productRepository.deleteById(id);
     }
@@ -58,6 +75,20 @@ public class ProductService {
         product.setStock(product.getStock() - quantity);
 
         productRepository.save(product);
+    }
+
+    public void update(ProductRequest productRequest) {
+        Product existingProduct = productRepository.findById(productRequest.getId())
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+        // DTO로 받은 업데이트 내용을 기존 상품에 반영
+        existingProduct.setName(productRequest.getName());
+        existingProduct.setDescription(productRequest.getDescription());
+        existingProduct.setPrice(productRequest.getPrice());
+        existingProduct.setStock(productRequest.getStock());
+
+        // 업데이트된 상품 정보 저장
+        productRepository.save(existingProduct);
     }
 }
 

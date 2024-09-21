@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
+    @Transactional
     public String createOrder(Principal principal) {
         Member member = memberService.findByLoginId(principal.getName());
         Cart cart = cartService.findByMember(member);
@@ -58,8 +60,9 @@ public class OrderController {
 
     @GetMapping
     public String listOrders(Principal principal, Model model) {
-        Member member = memberService.findByLoginId(principal.getName());
+        //Member member = memberService.findByLoginId(principal.getName());
         //List<Order> orders = orderService.findOrdersByMember(member);
+        System.out.println("listOrders query test");
         List<Order> orders = orderService.findAll();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         model.addAttribute("orders", orders);
@@ -69,7 +72,8 @@ public class OrderController {
 
     @GetMapping("/v1/orders")
     public String v1_listOrders(Principal principal, Model model) {
-        Member member = memberService.findByLoginId(principal.getName());
+        //Member member = memberService.findByLoginId(principal.getName());
+        System.out.println("listOrders query test");
         List<Order> orders = orderService.findAll();
         for(Order order : orders){
           order.getMember().getName();
@@ -78,11 +82,13 @@ public class OrderController {
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         model.addAttribute("orders", orders);
+        model.addAttribute("dateFormatter", formatter);
         return "/orders/orderList";
     }
     @GetMapping("/v2/orders")
     public String v2_listOrders(Principal principal, Model model) {
-        Member member = memberService.findByLoginId(principal.getName());
+        //Member member = memberService.findByLoginId(principal.getName());
+        System.out.println("listOrders query test");
         List<Order> orders = orderService.findAll();
         List<OrderRequest> result = orders.stream()
                 .map(o -> new OrderRequest(o))
@@ -97,7 +103,8 @@ public class OrderController {
 
     @GetMapping("/v3/orders")
     public String v3_listOrders(Principal principal, Model model) {
-        Member member = memberService.findByLoginId(principal.getName());
+        //Member member = memberService.findByLoginId(principal.getName());
+        System.out.println("listOrders query test");
         List<Order> orders = orderService.findAllWithItem();
         List<OrderRequest> result = orders.stream()
                 .map(o -> new OrderRequest(o))

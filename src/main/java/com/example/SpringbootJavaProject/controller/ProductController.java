@@ -3,6 +3,7 @@ package com.example.SpringbootJavaProject.controller;
 import com.example.SpringbootJavaProject.entitiy.Member;
 import com.example.SpringbootJavaProject.entitiy.Product;
 import com.example.SpringbootJavaProject.request.ProductRequest;
+import com.example.SpringbootJavaProject.request.ProductUpdateRequest;
 import com.example.SpringbootJavaProject.service.CartService;
 import com.example.SpringbootJavaProject.service.MemberService;
 import com.example.SpringbootJavaProject.service.ProductService;
@@ -114,12 +115,12 @@ public class ProductController {
         return "/products/productForm";
     }
 
-    @PostMapping
-    public String saveProduct(@ModelAttribute Product product) {
-        product.setCreatedDate(LocalDateTime.now());
-        productService.save(product);
-        return "redirect:/products";
-    }
+//    @PostMapping
+//    public String saveProduct(@ModelAttribute Product product) {
+//        product.setCreatedDate(LocalDateTime.now());
+//        productService.save(product);
+//        return "redirect:/products";
+//    }
 
     @GetMapping("/{id}/edit")
     public String editProductForm(@PathVariable("id") Long id, Model model) {
@@ -127,6 +128,21 @@ public class ProductController {
         product.ifPresent(value -> model.addAttribute("product", value));
         return "/products/productForm";
     }
+//    @PostMapping("/update")
+//    public String updateProduct(@ModelAttribute ProductUpdateRequest productUpdateRequest) {
+//        productService.update(productUpdateRequest);
+//        return "redirect:/products";
+//    }
+    @PostMapping("/update")
+    public String saveOrUpdateProduct(@ModelAttribute ProductRequest productRequest) {
+        if (productRequest.getId() == null) {
+            productService.save(productRequest);
+        } else {
+            productService.update(productRequest);
+        }
+        return "redirect:/products";
+    }
+
 
     @PostMapping("/{id}/delete")
     public String deleteProduct(@PathVariable("id") Long id) {
@@ -152,7 +168,6 @@ public class ProductController {
         Product product = productService.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
-        System.out.println("@@");
         // 장바구니에 상품 추가
         cartService.addToCart(member, quantity, product);
 

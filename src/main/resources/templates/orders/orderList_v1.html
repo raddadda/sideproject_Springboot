@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order List</title>
+</head>
+<body>
+<h1>Your Orders</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>Date</th>
+        <th>Order Name</th>
+        <th>Total Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.orderDate.format(dateFormatter)}"></td>
+        <td>
+            <ul>
+                <!-- 주문한 상품의 이름을 출력 -->
+                <li th:each="item : ${order.orderItems}" th:text="${item.product.name}"></li>
+            </ul>
+        </td>
+        <td th:text="${#numbers.formatInteger(order.totalPrice, 0)}"></td> <!-- 총 가격 포맷 -->
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/products}">Back to Products</a>
+</body>
+</html>

@@ -100,7 +100,6 @@ public class ProductController {
     }
 
 
-
     @GetMapping("/{id}")
     public String viewProduct(@PathVariable("id") Long id, Model model) {
         Optional<Product> product = productService.findById(id);
@@ -115,24 +114,13 @@ public class ProductController {
         return "/products/productForm";
     }
 
-//    @PostMapping
-//    public String saveProduct(@ModelAttribute Product product) {
-//        product.setCreatedDate(LocalDateTime.now());
-//        productService.save(product);
-//        return "redirect:/products";
-//    }
-
     @GetMapping("/{id}/edit")
     public String editProductForm(@PathVariable("id") Long id, Model model) {
         Optional<Product> product = productService.findById(id);
         product.ifPresent(value -> model.addAttribute("product", value));
         return "/products/productForm";
     }
-//    @PostMapping("/update")
-//    public String updateProduct(@ModelAttribute ProductUpdateRequest productUpdateRequest) {
-//        productService.update(productUpdateRequest);
-//        return "redirect:/products";
-//    }
+
     @PostMapping("/update")
     public String saveOrUpdateProduct(@ModelAttribute ProductRequest productRequest) {
         if (productRequest.getId() == null) {

@@ -61,7 +61,6 @@ public class OrderController {
     @GetMapping
     public String listOrders(Principal principal, Model model) {
         //Member member = memberService.findByLoginId(principal.getName());
-        //List<Order> orders = orderService.findOrdersByMember(member);
         System.out.println("listOrders query test");
         List<Order> orders = orderService.findAll();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -72,7 +71,6 @@ public class OrderController {
 
     @GetMapping("/v1/orders")
     public String v1_listOrders(Principal principal, Model model) {
-        //Member member = memberService.findByLoginId(principal.getName());
         System.out.println("listOrders query test");
         List<Order> orders = orderService.findAll();
         for(Order order : orders){
@@ -87,7 +85,6 @@ public class OrderController {
     }
     @GetMapping("/v2/orders")
     public String v2_listOrders(Principal principal, Model model) {
-        //Member member = memberService.findByLoginId(principal.getName());
         System.out.println("listOrders query test");
         List<Order> orders = orderService.findAll();
         List<OrderRequest> result = orders.stream()
@@ -103,7 +100,6 @@ public class OrderController {
 
     @GetMapping("/v3/orders")
     public String v3_listOrders(Principal principal, Model model) {
-        //Member member = memberService.findByLoginId(principal.getName());
         System.out.println("listOrders query test");
         List<Order> orders = orderService.findAllWithItem();
         List<OrderRequest> result = orders.stream()
@@ -116,6 +112,7 @@ public class OrderController {
         return "/orders/orderList_v3";
     }
 
+    //v3의 페이징이 불가능한 점을 해결한 방법
     @GetMapping("/v4/orders")
     public String v4_listOrders(@RequestParam(value = "page", defaultValue = "0") int page,
                                 @RequestParam(value = "size", defaultValue = "2") int size,

@@ -77,24 +77,7 @@ public class SecurityLoginController {
 
         return "redirect:/login";
     }
-//@PostMapping("/join")
-//public ResponseEntity<String> create(@RequestBody JoinRequest joinRequest) {
-//    if (joinRequest.getPassword() == null || joinRequest.getPassword().isEmpty()) {
-//        return ResponseEntity.badRequest().body("비밀번호는 필수입니다.");
-//    }
-//
-//    memberService.join(joinRequest);
-//    return ResponseEntity.ok("회원가입이 완료되었습니다.");
-//}
 
-//    @GetMapping("/logout")
-//    public String logout(HttpServletRequest request, HttpServletResponse response) {
-//        HttpSession session = request.getSession(false);
-//        if (session != null) {
-//            session.invalidate();
-//        }
-//        return "redirect:/"; // 홈 화면으로 리디렉션
-//    }
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
